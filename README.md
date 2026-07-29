@@ -4,7 +4,7 @@ Scan the tag. See the asset.
 
 A facilities asset register: track assets from purchase to disposal, print a QR label per asset, and let maintenance techs scan the tag on their phone to view the asset and log repairs — working offline in signal-dead plant rooms and syncing once back online.
 
-This repo is currently a **Phase 0 scaffold** — the asset register itself (CRUD screens, QR generation, mobile scan flow) hasn't been built yet. See the TagPoint product & technical plan for the full scope, data model, and roadmap.
+**Phase 1 is done**: the office/admin side of the register — sign in, manage assets/locations/cost centres/categories, dispose assets, export CSV. QR generation and the mobile scan-and-log flow (Phase 2) come next. See the TagPoint product & technical plan for the full scope, data model, and roadmap.
 
 ## Stack
 
@@ -17,7 +17,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Without Supabase env vars set (see below), the app runs but any data calls will fail — that's expected until a Supabase project is wired up.
+Open [http://localhost:3000](http://localhost:3000). Without Supabase env vars set (see below), every page shows a friendly "Supabase isn't set up yet" message instead of crashing — that's expected until a Supabase project is wired up.
 
 ## Setting up Supabase
 
@@ -38,6 +38,19 @@ Once the project exists, regenerate the TypeScript types from the real schema (t
 npx supabase gen types typescript --project-id <your-project-ref> > src/lib/supabase/types.ts
 ```
 
+## First login — becoming an admin
+
+New accounts default to the **technician** role (see `handle_new_user()` in `supabase/migrations/`), and only admin/office can add or edit assets. To bootstrap your own account:
+
+1. Go to `/signup`, create an account, and confirm it via the email Supabase sends.
+2. In the Supabase dashboard's **SQL Editor**, run:
+   ```sql
+   update profiles set role = 'admin' where email = 'you@example.com';
+   ```
+3. Sign in — you'll now see the full office/admin navigation (Assets, Locations, Cost Centres, Categories).
+
+There's no user-management screen yet, so promoting anyone else to `office` or `admin` means running the same kind of `update` statement for now.
+
 ## Deploying to Vercel
 
 1. Import this repo into a new [Vercel](https://vercel.com) project.
@@ -55,11 +68,17 @@ npm run generate-icons
 ## Project structure
 
 ```
-src/app/            Routes, layout, PWA manifest, service worker (sw.ts)
-src/lib/supabase/    Browser + server Supabase clients, DB types
-src/proxy.ts         Refreshes the Supabase auth session on every request
-supabase/migrations/ Schema + Row Level Security, in order
-scripts/             Icon generation
+src/app/login, /signup    Auth pages (Supabase email/password)
+src/app/(app)/             Protected office/admin screens — assets, locations,
+                           cost-centres, categories, all behind the layout's
+                           session check
+src/app/error.tsx          Friendly fallback when Supabase isn't configured
+src/lib/auth.ts            Current-user/role lookup, shared by pages & actions
+src/lib/depreciation.ts    Straight-line book value calculation
+src/lib/supabase/          Browser + server Supabase clients, DB types, env check
+src/proxy.ts               Refreshes the Supabase auth session on every request
+supabase/migrations/       Schema + Row Level Security, in order
+scripts/                   Icon generation
 ```
 
 ## Known issue
@@ -68,4 +87,4 @@ scripts/             Icon generation
 
 ## Roadmap
 
-Phase 1 is the office/admin CRUD screens (asset, location, cost centre, category) and roles. See the plan for the full phase breakdown.
+Phase 2 is next: QR code generation and printable labels, and the mobile scan-and-log flow with offline support. See the plan for the full phase breakdown.
