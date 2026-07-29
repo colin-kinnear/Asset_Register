@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f6f8;
+  --surface: #ffffff;
+  --surface-raised: #fbfcfd;
+  --foreground: #182430;
+  --ink-muted: #55636f;
+  --ink-faint: #8695a1;
+  --accent: #1f5d8c;
+  --accent-ink: #0f3a57;
+  --accent-soft: #dce9f2;
+  --line: #d3dbe1;
+  --line-strong: #b7c2ca;
+  --good: #2e7d5b;
+  --good-soft: #e1f1e8;
+  --warn: #b8791c;
+  --warn-soft: #f7ead3;
+  --critical: #b23a34;
+  --critical-soft: #f8e2e0;
+}
+
+:root[data-theme="dark"] {
+  --background: #10161c;
+  --surface: #161e26;
+  --surface-raised: #1b242d;
+  --foreground: #e7edf2;
+  --ink-muted: #96a6b2;
+  --ink-faint: #647380;
+  --accent: #6fb3e0;
+  --accent-ink: #bfe1f5;
+  --accent-soft: #1e3a4c;
+  --line: #2a3640;
+  --line-strong: #3a4954;
+  --good: #5cbe93;
+  --good-soft: #173327;
+  --warn: #e0a94c;
+  --warn-soft: #3a2e14;
+  --critical: #e17872;
+  --critical-soft: #3c1f1d;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-foreground: var(--foreground);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-critical: var(--critical);
+  --color-critical-soft: var(--critical-soft);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #10161c;
+    --surface: #161e26;
+    --surface-raised: #1b242d;
+    --foreground: #e7edf2;
+    --ink-muted: #96a6b2;
+    --ink-faint: #647380;
+    --accent: #6fb3e0;
+    --accent-ink: #bfe1f5;
+    --accent-soft: #1e3a4c;
+    --line: #2a3640;
+    --line-strong: #3a4954;
+    --good: #5cbe93;
+    --good-soft: #173327;
+    --warn: #e0a94c;
+    --warn-soft: #3a2e14;
+    --critical: #e17872;
+    --critical-soft: #3c1f1d;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+}
